@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nakshtraa Jagtap — Portfolio
 
-## Getting Started
+Freelance portfolio for a full stack web developer, written for clients.
+Built with **Next.js 16 (App Router)**, **TypeScript**, **Tailwind CSS v4** and **Motion**.
 
-First, run the development server:
+Home page: Intro → Tech strip → Services → Work → Process → About → Contact. Separate `/pricing` page.
+Deep-black theme with electric-blue glass and "vibe coding" effects: decoding name, typing code editor,
+typewriter, cursor spotlight, scroll reveals, tilt cards and a tech marquee (`src/components/fx/`).
+All movement switches off for visitors who set "reduce motion" on their device.
+
+## Quick start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where to edit content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Everything lives in `src/data/` — you never need to touch a component.
 
-## Learn More
+| File | What it holds |
+| ---- | ------------- |
+| `src/data/site.ts` | Name, title, pitch, email, phone/WhatsApp, location, stats, bio, social links |
+| `src/data/services.ts` | Services (plain-language descriptions) and the "How we'll work together" steps |
+| `src/data/projects.ts` | Client work: project name, client, type, description, live URL |
+| `src/data/skills.ts` | Tech stack and the AI-assisted development card |
+| `src/data/pricing.ts` | Pricing packages — while empty, /pricing shows "coming soon" + "Quote on request" |
+| `src/data/navigation.ts` | Navbar / footer links |
 
-To learn more about Next.js, take a look at the following resources:
+Social links set to `"[ADD … URL]"` stay hidden until you replace them with a real URL.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Images
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Photo → `public/images/profile.jpg`
+- Project screenshots → `public/images/work/<slug>.jpg`
 
-## Deploy on Vercel
+They're detected on the server and switch on automatically. See `public/images/README.md`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contact form
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The form posts to `src/app/api/contact/route.ts`. Until an email provider is connected
+there, it hands the finished message to WhatsApp or the visitor's email app, so no
+enquiry is lost. To send emails directly, follow the Resend example at the top of
+`route.ts` and set `RESEND_API_KEY` and `CONTACT_TO` in `.env.local`.
+
+## Deploy
+
+Set `NEXT_PUBLIC_SITE_URL` to your domain (used for link previews, sitemap and robots),
+then deploy to Vercel or any Node host.

@@ -1,48 +1,30 @@
-import { ImageIcon, FileText, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type Kind = "image" | "portrait" | "document";
-
 interface PlaceholderProps {
-  /** Text shown in the middle, e.g. "[ADD PROJECT SCREENSHOT]". */
+  /** Large text in the middle — initials for a portrait, the project name for a screenshot. */
   label: string;
-  /** Where the real file should go, e.g. "public/images/projects/planngo/thumbnail.jpg". */
-  hint?: string;
-  kind?: Kind;
+  /** Small mono line underneath. */
+  caption?: string;
   className?: string;
 }
 
-const icons: Record<Kind, typeof ImageIcon> = { image: ImageIcon, portrait: User, document: FileText };
-
 /**
- * A designed empty state for any asset that hasn't been added yet.
- * Looks intentional in the layout (gold hairline frame, dot grid, mono label)
- * rather than like a broken image. Fills its parent — give the parent a size.
+ * Shown in place of an image that hasn't been added yet. Designed to look
+ * intentional to visitors (no file paths or "missing" wording) — fills its parent.
  */
-export function Placeholder({ label, hint, kind = "image", className }: PlaceholderProps) {
-  const Icon = icons[kind];
+export function Placeholder({ label, caption, className }: PlaceholderProps) {
   return (
     <div
-      role="img"
-      aria-label={`${label}${hint ? ` — ${hint}` : ""}`}
+      aria-hidden="true"
       className={cn(
-        "absolute inset-0 flex flex-col items-center justify-center gap-3 overflow-hidden bg-surface text-center",
-        "bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:18px_18px]",
+        "scanline absolute inset-0 flex flex-col items-center justify-center gap-2 overflow-hidden bg-surface text-center",
         className,
       )}
     >
-      {/* corner marks */}
-      <span aria-hidden="true" className="absolute left-3 top-3 h-4 w-4 border-l border-t border-gold/60" />
-      <span aria-hidden="true" className="absolute right-3 top-3 h-4 w-4 border-r border-t border-gold/60" />
-      <span aria-hidden="true" className="absolute bottom-3 left-3 h-4 w-4 border-b border-l border-gold/60" />
-      <span aria-hidden="true" className="absolute bottom-3 right-3 h-4 w-4 border-b border-r border-gold/60" />
-      <span aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,162,74,0.10),transparent_60%)]" />
-
-      <span className="relative grid h-11 w-11 place-items-center rounded-full border border-gold/40 bg-bg/60 text-gold">
-        <Icon size={18} strokeWidth={1.5} />
-      </span>
-      <span className="relative font-mono text-[11px] uppercase tracking-[0.2em] text-gold-soft/90 px-4">{label}</span>
-      {hint ? <span className="relative font-mono text-[10px] text-fg-subtle px-6 break-all">{hint}</span> : null}
+      <span className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.07)_1px,transparent_1px)] [background-size:16px_16px]" />
+      <span className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgb(var(--glow)/0.18),transparent_65%)]" />
+      <span className="relative px-6 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">{label}</span>
+      {caption ? <span className="relative px-6 font-mono text-[11px] uppercase tracking-[0.18em] text-accent-ink">{caption}</span> : null}
     </div>
   );
 }

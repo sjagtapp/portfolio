@@ -1,16 +1,19 @@
-/** Section anchors used by the navbar, mobile menu, and active-section tracking. */
+/** Navbar and footer links. `id` is a section anchor on the home page; `href` is a separate page. */
 export interface NavItem {
-  id: string;
   label: string;
+  id?: string;
+  href?: string;
 }
 
 export const navigation: NavItem[] = [
-  { id: "home", label: "Home" },
+  { id: "services", label: "Services" },
+  { id: "work", label: "Work" },
+  { id: "process", label: "Process" },
   { id: "about", label: "About" },
-  { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projects" },
-  { id: "experience", label: "Experience" },
-  { id: "education", label: "Education" },
-  { id: "research", label: "Research" },
+  { href: "/pricing", label: "Pricing" },
   { id: "contact", label: "Contact" },
 ];
+
+/** Resolves a nav item to a link that works from any page. */
+export const navHref = (item: NavItem, onHome: boolean) =>
+  item.href ?? (onHome ? `#${item.id}` : `/#${item.id}`);

@@ -1,32 +1,67 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────
-   Design tokens → Tailwind utilities
-   bg-bg, text-fg, text-fg-muted, border-line, text-gold, font-display …
+   Design tokens — deep black, one electric-blue accent, frosted glass.
+   Change --glow (an RGB triplet) and the four --accent values to re-theme every glow.
+   Utilities: bg-bg, bg-surface, bg-muted, text-ink, text-ink-muted,
+   text-ink-subtle, border-line, bg-accent, text-accent-ink, bg-accent-soft …
    ───────────────────────────────────────────── */
-@theme inline {
-  --color-bg: #060607;
-  --color-bg-elevated: #0b0b0d;
-  --color-surface: #111114;
-  --color-surface-hover: #16161a;
-  --color-line: rgba(255, 255, 255, 0.08);
-  --color-line-strong: rgba(255, 255, 255, 0.16);
-  --color-fg: #f4f3ee;
-  --color-fg-muted: #a2a29b;
-  --color-fg-subtle: #6e6e68;
-  --color-gold: #c9a24a;
-  --color-gold-soft: #e9d08f;
-  --color-gold-dim: rgba(201, 162, 74, 0.14);
+:root {
+  --bg: #05060a;
+  --surface: #0c0e15;
+  --muted: #141722;
+  --ink: #f5f5f6;
+  --ink-muted: #a1a1aa;
+  --ink-subtle: #6b7080;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.15);
+  /* Electric blue — fills and glows */
+  --glow: 37 99 235;
+  --accent: #2563eb;
+  --accent-hover: #3b82f6;
+  --accent-soft: rgb(var(--glow) / 0.14);
+  /* Lighter blue for text on dark, keeps contrast readable */
+  --accent-ink: #60a5fa;
+  --on-accent: #ffffff;
+  --success: #22c55e;
+  --elev-soft: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -16px rgba(0, 0, 0, 0.8);
+  --elev-glow: 0 0 0 1px rgb(var(--glow) / 0.3), 0 24px 60px -20px rgb(var(--glow) / 0.55);
+  /* Code-editor syntax colours */
+  --code-kw: #93c5fd;
+  --code-key: #e4e4e7;
+  --code-str: #86efac;
+  --code-bool: #fbbf24;
+  --code-punc: #71717a;
+  color-scheme: dark;
+}
 
-  --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --color-success: var(--success);
+  --color-code-kw: var(--code-kw);
+  --color-code-key: var(--code-key);
+  --color-code-str: var(--code-str);
+  --color-code-bool: var(--code-bool);
+  --color-code-punc: var(--code-punc);
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-jakarta), ui-sans-serif, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "Cascadia Mono", Menlo, monospace;
 
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
-
-  --shadow-gold: 0 0 0 1px rgba(201, 162, 74, 0.25), 0 20px 60px -20px rgba(201, 162, 74, 0.35);
-  --shadow-panel: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+  --shadow-soft: var(--elev-soft);
+  --shadow-glow: var(--elev-glow);
 }
 
 /* ─────────────────────────────────────────────
@@ -34,49 +69,44 @@
    ───────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
-  color-scheme: dark;
+  background: var(--bg);
 }
-html.custom-cursor,
-html.custom-cursor * {
-  cursor: none !important;
-}
+/* No body background: the fixed <Background /> layer sits between the page canvas and the content. */
 body {
-  background: var(--color-bg);
-  color: var(--color-fg);
+  margin: 0;
+  color: var(--ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
-body.is-loading {
+body.is-locked {
   overflow: hidden;
 }
 ::selection {
-  background: rgba(201, 162, 74, 0.35);
+  background: rgb(var(--glow) / 0.5);
   color: #fff;
 }
 :focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--accent-ink);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
-section[id],
-[data-section] {
-  scroll-margin-top: 88px;
+section[id] {
+  scroll-margin-top: 80px;
 }
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-bg);
+  background: var(--bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1f1f23;
-  border: 2px solid var(--color-bg);
+  background: #27272a;
+  border: 2px solid var(--bg);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2c2c31;
+  background: var(--accent);
 }
 
 /* ─────────────────────────────────────────────
@@ -84,96 +114,204 @@ section[id],
    ───────────────────────────────────────────── */
 @utility container-x {
   width: 100%;
-  max-width: 76rem;
+  max-width: 1200px;
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  padding-inline: 1rem;
   @media (min-width: 640px) {
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 1024px) {
     padding-inline: 2rem;
   }
-}
-
-/* Hairline that fades in from both ends with a gold centre */
-@utility gold-line {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(201, 162, 74, 0.5), transparent);
-}
-
-/* Restrained glass — used for the navbar (scrolled), terminal, modal */
-@utility glass {
-  background: rgba(14, 14, 16, 0.6);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-/* Gold gradient text for one word, never a whole heading */
-@utility text-gold-gradient {
-  background: linear-gradient(100deg, #e9d08f 0%, #c9a24a 45%, #f1dea3 100%);
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: gold-shimmer 6s ease-in-out infinite;
-}
-
-/* Film grain overlay. Static SVG noise, animated via translate only. */
-@utility noise {
-  pointer-events: none;
-  position: absolute;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 8s steps(10) infinite;
-}
-
-/* Perspective grid used behind the hero */
-@utility grid-bg {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 20%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 20%, transparent 75%);
 }
 
 @utility text-balance {
   text-wrap: balance;
 }
 
-/* Hide scrollbar for the certificates rail while keeping it scrollable */
-@utility no-scrollbar {
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+@utility text-pretty {
+  text-wrap: pretty;
+}
+
+/* Blue gradient text for highlights */
+@utility text-gradient {
+  background: linear-gradient(100deg, #93c5fd 0%, #3b82f6 45%, #a5b4fc 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-pan 6s ease-in-out infinite alternate;
 }
 
 /* ─────────────────────────────────────────────
-   Keyframes
+   Effects
    ───────────────────────────────────────────── */
-@keyframes gold-shimmer {
-  0%,
-  100% {
-    background-position: 0% 50%;
+
+/* Rotating blue border. Give the element a border-radius and put a solid-background child inside. */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.glow-border {
+  position: relative;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--angle),
+    rgba(255, 255, 255, 0.06) 0%,
+    rgb(var(--glow) / 0.95) 10%,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(147, 197, 253, 0.7) 62%,
+    rgba(255, 255, 255, 0.06) 78%
+  );
+  animation: spin-angle 6s linear infinite;
+}
+
+/* Cursor spotlight on cards. SpotlightGroup sets --mx / --my on each .spotlight. */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before,
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.spotlight::before {
+  z-index: -1;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgb(var(--glow) / 0.16), transparent 45%);
+}
+.spotlight::after {
+  padding: 1px;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(96, 165, 250, 0.85), transparent 45%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.spotlight-group:hover .spotlight::after,
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* In the components layer so Tailwind utilities (hover:border-…, bg-…) can still override them. */
+@layer components {
+  /* Glass panel: translucent sheen, hairline border and a top highlight.
+     No backdrop-filter on purpose — what sits behind is already soft gradients, so a live blur
+     would cost GPU time every frame (the background drifts) for no visible difference. */
+  .glass {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.015));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 20px 40px -24px rgba(0, 0, 0, 0.8);
   }
-  50% {
-    background-position: 100% 50%;
+
+  /* Soft colour orb — the signature glow behind headings and the photo.
+     The gradient itself is the softness; no filter: blur, so it stays cheap to animate. */
+  .orb {
+    position: absolute;
+    border-radius: 9999px;
+    pointer-events: none;
+    background: radial-gradient(
+      closest-side,
+      rgb(var(--glow) / 0.6),
+      rgb(var(--glow) / 0.28) 40%,
+      rgb(var(--glow) / 0.08) 70%,
+      transparent 100%
+    );
   }
 }
-@keyframes grain {
-  0%   { transform: translate(0, 0); }
-  10%  { transform: translate(-5%, -10%); }
-  20%  { transform: translate(-15%, 5%); }
-  30%  { transform: translate(7%, -25%); }
-  40%  { transform: translate(-5%, 25%); }
-  50%  { transform: translate(-15%, 10%); }
-  60%  { transform: translate(15%, 0); }
-  70%  { transform: translate(0, 15%); }
-  80%  { transform: translate(3%, 35%); }
-  90%  { transform: translate(-10%, 10%); }
-  100% { transform: translate(0, 0); }
+
+/* Light sweep across buttons on hover */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%) skewX(-20deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.shine:hover::after {
+  transform: translateX(120%) skewX(-20deg);
+}
+
+/* Blinking text cursor */
+.caret {
+  display: inline-block;
+  width: 0.5em;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.16em;
+  background: var(--accent-ink);
+  animation: blink 1s steps(1) infinite;
+}
+
+/* Infinite horizontal scroll */
+.marquee {
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Scan line across image placeholders */
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, rgb(var(--glow) / 0.12), transparent);
+  animation: scan 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float 8s ease-in-out infinite reverse;
+}
+.animate-drift {
+  animation: drift 22s ease-in-out infinite alternate;
+}
+.animate-drift-reverse {
+  animation: drift 28s ease-in-out infinite alternate-reverse;
+}
+.animate-breathe {
+  animation: breathe 7s ease-in-out infinite;
+}
+.animate-rise {
+  animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes spin-angle {
+  to {
+    --angle: 360deg;
+  }
+}
+@keyframes gradient-pan {
+  to {
+    background-position: 100% center;
+  }
 }
 @keyframes blink {
   50% {
@@ -185,49 +323,60 @@ section[id],
     transform: translateX(-50%);
   }
 }
-@keyframes spin-slow {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes pulse-ring {
-  0% {
-    box-shadow: 0 0 0 0 rgba(201, 162, 74, 0.5);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(201, 162, 74, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(201, 162, 74, 0);
-  }
-}
-
-@keyframes scrollhint {
+@keyframes scan {
   0% {
     transform: translateY(-100%);
   }
   100% {
-    transform: translateY(200%);
+    transform: translateY(250%);
   }
 }
-.animate-scrollhint {
-  animation: scrollhint 1.8s ease-in-out infinite;
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
-.animate-blink {
-  animation: blink 1s steps(1) infinite;
+@keyframes drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(6vw, 4vh) scale(1.1);
+  }
+  100% {
+    transform: translate(-4vw, 8vh) scale(0.95);
+  }
 }
-.animate-marquee {
-  animation: marquee 40s linear infinite;
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
 }
-.animate-spin-slow {
-  animation: spin-slow 24s linear infinite;
-}
-.animate-pulse-ring {
-  animation: pulse-ring 2.2s ease-out infinite;
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
 }
 
 /* ─────────────────────────────────────────────
-   Reduced motion — everything decorative stops.
+   Reduced motion — decorative movement stops.
    Motion-library animations are disabled in JS via useReducedMotion().
    ───────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
@@ -240,8 +389,5 @@ section[id],
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-  .noise {
-    animation: none;
   }
 }
